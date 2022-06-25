@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Contact page is beneficial for students if they have any questions or feedback. Also, it is available for universities’ admins who are willing to use StudentHub software and want to reach us.">
+    <meta name="keywords" content="Contact us, contact number, message StudentHub, email studentHub team, address studentHub group, studentHub contact, feedback, complaints, contact team, Need StudentHub instant help, request help from StudentHub">
+
+    <title>Contact us - Studenthub</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/stylesheet.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <%- include ("header.ejs") %>
+
+                <!-- Begin Page Content -->
+                <div class=" row container-fluid justify-content-center mb-4">
+ 
+                    <!-- Page Heading -->
+                    <h2 class=" mb-4 text-primary ">Contact us</h2>
+
+                </div>
+                <!-- /.container-fluid -->
+                <!-- Wrapper container -->
+<div class="container">
+<div class="row">
+  
+  <div class="form-res col-6">
+    <!-- Bootstrap 5 starter form -->
+    <form action="/contact" method="post" class="contact-form justify-content-left" >
+      
+  
+      <!-- Name input -->
+      <div class="mb-3">
+        <label class="form-label text-primary" for="name">Name</label>
+        <input  class="form-control" type="text"
+        class="contact-form-text"
+        placeholder="Your name"
+        name="yourname"
+        required/>
+      </div>
+  
+      <!-- Email address input -->
+      <div class="mb-3">
+        <label class="form-label text-primary" for="emailAddress">Email Address</label>
+        <input class="form-control" type="email"
+        class="contact-form-text"
+        placeholder="Your email"
+        name="youremail"
+        required />
+      </div>
+
+      <!-- Subjet input -->
+      <div class="mb-3">
+        <label class="form-label text-primary" for="name">Subjet</label>
+        <input  class="form-control" type="text"
+        class="contact-form-text"
+        name="yoursubject"
+        placeholder="Subject"
+        required/>
+      </div>
+
+      <!-- Message input -->
+      <div class="mb-3">
+        <label class="form-label text-primary" for="message">Message</label>
+        <textarea class="form-control" placeholder="Your message"
+        name="yourmessage" style="height: 10rem;" required></textarea>
+      </div>
+  
+      <!-- Form submit button -->
+      <div class="d-grid">
+        <button class="btn btn-primary btn-sm rounded mb-3" type="submit"
+        id="form-submit"
+        value="Send"
+        required>Submit</button>
+      </div>
+    
+    </form>
+  </div>
+  <div class="col-6">
+<img class="contact-img" src="img/contact-us.svg"  alt="" srcset="">
+  </div>
+</div>
+  </div>
+ 
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; StudentHub 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        
+        <!-- End of Content Wrapper -->
+
+    
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <%- include ("logout.ejs") %>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>

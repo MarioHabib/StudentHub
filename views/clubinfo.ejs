@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Clubs service will enable students to find information about university clubs such as Enacts, AAST entrepreneurship and Hands.">
+    <meta name="keywords" content="clubs and activities, Enacts, AAST entrepreneurship center, Hands">
+
+    <title>Clubs - StudentHub</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/stylesheet.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+    <%- include ("header.ejs") %>
+    
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <% data.clubs.forEach(function(club) { %>
+                        
+                            
+
+                                <!-- clubs cards -->
+                                <div class="col-xl-12 col-md-6" style="height:auto;">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <i><img class="icon-circle mr-3" src="<%= club.image %>" alt="club photo"></i>
+                                                </div>
+                                                <div class="col mr-2">
+                                                    <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">
+                                                        <%= club.clubname %></div>
+                                                </div>
+                                                
+                                            </div>
+                                           
+                                            <div  class="row border border-primary rounded text-300 m-2 p-2  text-primary-800">
+                                                <h6 class="text text-primary text-capitalize font-weight-bold" >Overview: </h6> <%= club.overview %></div>
+                                            <div class="row border border-primary rounded text-300 m-2 p-2  text-primary-800">
+                                                <h6 class="text text-primary text-capitalize font-weight-bold">start year:</h6> <%= club.startyear %></div>
+                                            <div class="row border border-primary rounded text-300 m-2 p-2  text-primary-800">
+                                                <h6 class="text text-primary text-capitalize font-weight-bold">slogan:</h6> <%= club.slogan %></div>
+                                            <div class="row border border-primary rounded text-300 m-2 p-2  text-primary-800">
+                                                <h6 class="text text-primary text-capitalize font-weight-bold">vision:</h6> <%= club.vision %></div>
+                                            <div class="row border border-primary rounded text-300 m-2 p-2  text-primary-800">
+                                                <h6 class="text text-primary text-capitalize font-weight-bold">goal:</h6> <%= club.goal %></div>
+                                            <div class="row border border-primary rounded text-300 m-2 p-2  text-primary-800">
+                                                <h6 class="text text-primary text-capitalize font-weight-bold">activities:</h6> <%= club.activities %></div>
+                                            <div class="row border border-primary rounded text-300 m-2 p-2  text-primary-800">
+                                                <h6 class="text text-primary text-capitalize font-weight-bold">FB page:</h6> <a href="<%= club.contacts %> " target="_blank" rel="noopener noreferrer"><%= club.contacts %></a> </div>
+                                                    
+                                            </div>
+                                                       
+                                    </div>
+                                </div>
+
+                            
+                            
+                    <% }); %>
+                        
+                        
+                    </div>
+                    <!-- Page Heading -->
+                    
+                    
+                    
+                    
+                    
+                    
+                </div>
+                <!-- /.container-fluid -->
+                
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; StudentHub 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <%- include ("logout.ejs") %>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/main.js"></script>
+
+
+
+</body>
+
+</html>

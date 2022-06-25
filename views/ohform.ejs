@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Office hours appointment service helps students to  easily book  office hours virtually. Thus, they do  not need in person confirmation which wastes their time.">
+    <meta name="keywords" content="appointment, office hour service, scheduling appointment, contact my lecturer, find office hours">
+
+    <title>Appointment - StudentHub</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/stylesheet.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+    <%- include ("header.ejs") %>
+
+    
+
+                <!-- Begin Page Content -->
+                
+                <!-- /.container-fluid -->
+                <!-- Wrapper container -->
+<div class="container">
+
+    <!-- Bootstrap 5 starter form -->
+    <form action="/form" method="post" class="contact-form row justify-content-center" >
+        
+        <div class="col-12 col-sm-7 col-lg-7 ">
+            <div class="container-fluid  ">
+                <% data.courses.forEach(function(course) { %>
+                <div name="coursetitle" class="h3 mb-4 text-gray-800 text-center text-uppercase contact-form-text"><%= course.course_title %></div>
+                <div name="coursedayroom" class="h3 mb-4 text-gray-800 text-center text-capitalize contact-form-text"><%= course.oh_day %> - <%= course.oh_room %></div>
+                <div class="h5 mb-4 text-gray-800 text-center contact-form-text">Email:<span name="email"><%= course.email %></span> </div>
+                <% }); %>
+            </div>
+  
+      <!-- appointment input -->
+      <div class="mb-3">
+        <label class="form-label" for="Appointment">Appointment</label>
+        <select class="form-control" 
+        class="contact-form-text"
+        name="appointment"
+        required/>
+        <% data.courses.forEach(function(course) { %>
+        <option value="<%= course.office_hours1 %>"><%= course.office_hours1 %></option>
+        <option value="<%= course.office_hours2 %>"><%= course.office_hours2 %></option>
+        <% }); %>
+     </select>
+      </div>
+
+
+      <!-- Topic input -->
+      <div class="mb-3">
+        <label class="form-label" for="Topic">Topic</label>
+        <input  class="form-control" type="text"
+        class="contact-form-text"
+        name="yourtopic"
+        placeholder="Topic"
+        required/>
+      </div>
+
+      <!-- comment input -->
+      <div class="mb-3">
+        <label class="form-label" for="comment">Message</label>
+        <textarea class="form-control" placeholder="Your Message"
+        name="yourcomment" style="height: 10rem;" ></textarea>
+      </div>
+  
+      <!-- Form submit button -->
+      <div class="d-grid">
+        <button class="btn btn-primary btn-sm mb-3" type="submit"
+        id="form-submit"
+        value="Send"
+        required>Submit</button>
+      </div>
+    </div>
+    </form>
+  
+  </div>
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; StudentHub 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <%- include ("logout.ejs") %>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>
