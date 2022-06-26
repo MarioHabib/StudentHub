@@ -637,8 +637,7 @@ app.get('/robots.txt', function (req, res) {
 app.get('/logout',  (request, response, next) => {
 	request.session.loggedin = false;
 
-	request.session = null;
-	sessionStore.close();
+	
 	response.redirect('login');
  })
 
