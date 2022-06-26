@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mysql = require('mysql');
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session');
 const path = require('path');
 const multer = require('multer');
 const { json } = require('express/lib/response');
@@ -18,15 +18,27 @@ const connection = mysql.createConnection({
 
 
 const app = express();
+app.set('trust proxy', 1);
+
+app.use(session({
+secret: 'secret',
+saveUninitialized: true,
+resave: false,
+maxAge: 1000 * 60 * 15,
+cookie:{
+    secure: true
+       }
+}));
 app.set('view engine', 'ejs');
 
 
-app.use(session({
-	secret: 'keyboard cat',
-	resave: false,
-	saveUninitialized: false,
 
-}));
+// app.use(session({
+// 	secret: 'keyboard cat',
+// 	resave: false,
+// 	saveUninitialized: false,
+
+// }));
 
 
 
@@ -633,5 +645,5 @@ app.get('/logout',  (request, response, next) => {
 app.get('*', function(request, response){
 	response.render('notfound');
   });
-  
+
 app.listen(process.env.PORT);
