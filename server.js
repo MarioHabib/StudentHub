@@ -319,7 +319,7 @@ app.get('/delete/:postid', function(request, response, next){
 
 		if(error)
 		{
-			//throw error;
+			throw error;
 		}
 		else
 		{
@@ -463,7 +463,7 @@ app.post('/post', upload.single('pdf'), function(request, response) {
 	
 	
 	connection.query(sql, function (err, result) {
-    if (err) //throw err;
+    if (err) throw err;
 	response.redirect(request.get('referer'));
 	
     
@@ -589,7 +589,7 @@ app.post('/auth', function(request, response) {
 		connection.query('SELECT * FROM accounts WHERE id = ? AND password = ?', [studentid, password], function(error, results, fields) {
 			
 			// If there is an issue with the query, output the error
-			if (error) //throw error;
+			if (error) throw error;
 			// If the account exists
 			if (results.length > 0) {
 				// Authenticate the user
@@ -646,4 +646,4 @@ app.get('*', function(request, response){
   });
 const PORT = process.env.PORT;
 app.listen(PORT);
-console.log(`Server is listening on port ${PORT}...`);
+console.log(`Server is listening on port ${PORT}`);
