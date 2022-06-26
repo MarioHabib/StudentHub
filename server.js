@@ -7,23 +7,29 @@ const multer = require('multer');
 const { json } = require('express/lib/response');
 const bodyParser = require('body-parser');
 
+
 const connection = mysql.createConnection({
 	host     : 'eu-cdbr-west-02.cleardb.net',
 	user     : 'b47adab09e098c',
 	password : '7a480c1d',
 	database : 'heroku_3c8c520b5a07ad3',
-	multipleStatements: true
+	multipleStatements: true,
 });
+
 
 const app = express();
 app.set('view engine', 'ejs');
 
+
 app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true,
+	secret: 'keyboard cat',
+	resave: false,
+	saveUninitialized: false,
 
 }));
+
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -325,10 +331,14 @@ app.get('/login', function(request, response) {
 	
 });
 
+
 app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/index.html'));
 });
 
+app.get('/sitemap.xml', function(request, response) {
+	response.sendFile(path.join(__dirname + '/sitemap.xml'));
+});
 app.get('/FAQs', function(request, response) {	
 	if (request.session.loggedin) {
 		
@@ -607,15 +617,21 @@ app.get('/Home', function(request, response) {
 	
 });
 
+app.get('/robots.txt', function (req, res) {
+    res.type('text/plain');
+    res.send("User-agent: *\nDisallow: /");
+});
+
 app.get('/logout',  (request, response, next) => {
-	
 	request.session.loggedin = false;
+
+	request.session = null;
+	sessionStore.close();
 	response.redirect('login');
  })
 
 app.get('*', function(request, response){
 	response.render('notfound');
   });
-const port = process.env.PORT;
-app.listen(port);
-console.log(port);
+  
+app.listen(process.env.PORT);

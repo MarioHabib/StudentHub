@@ -1,0 +1,9 @@
+User-agent:*
+Allow:/$
+Allow:/login
+Disallow:/pdf
+Disallow:/*?
+Disallow:/*.pdf$
+Disallow: /
+
+Sitemap: http://www.studenthub.space/sitemap.xml

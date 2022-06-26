@@ -1,11 +1,13 @@
 {
   "name": "studenthub",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.14.2",
+    "npm": "8.5.0"
+  },
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "type": "module",
     "start": "node server.js"
   },
   "author": "",
@@ -13,12 +15,16 @@
   "dependencies": {
     "body-parser": "^1.20.0",
     "bootstrap-icons": "^1.8.3",
+    "connect-session": "^0.0.1",
+    "cookie-session": "^2.0.0",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
-    "express-session": "^1.17.2",
+    "express-mysql-session": "^2.1.8",
+    "express-session": "^1.17.3",
     "gridjs": "^5.0.2",
     "html": "^1.0.0",
+    "memorystore": "^1.6.7",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "nodemailer": "^6.7.5",
