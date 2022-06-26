@@ -26,7 +26,8 @@ saveUninitialized: true,
 resave: false,
 maxAge: 1000 * 60 * 15,
 cookie:{
-    secure: true
+    secure: true,
+	globaluserobj: globaluserobj
        }
 }));
 app.set('view engine', 'ejs');
