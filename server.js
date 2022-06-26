@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mysql = require('mysql');
 const express = require('express');
-const session = require('cookie-session');
+const session = require('express-session');
 const path = require('path');
 const multer = require('multer');
 const { json } = require('express/lib/response');
@@ -26,8 +26,7 @@ saveUninitialized: true,
 resave: false,
 maxAge: 1000 * 60 * 15,
 cookie:{
-    secure: true,
-	globaluserobj: globaluserobj
+    secure: true
        }
 }));
 app.set('view engine', 'ejs');
