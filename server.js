@@ -21,14 +21,22 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(session({
+cookie:{
+    secure: true,
+    maxAge:60000
+       },
+store: new RedisStore(),
 secret: 'secret',
 saveUninitialized: true,
-resave: false,
-maxAge: 1000 * 60 * 15,
-cookie:{
-    secure: true
-       }
+resave: false
 }));
+
+app.use(function(request,response,next){
+if(!request.session){
+    return next(new Error('Oh no')) //handle error
+}
+next() //otherwise continue
+});
 app.set('view engine', 'ejs');
 
 
