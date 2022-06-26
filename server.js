@@ -645,5 +645,6 @@ app.get('/logout',  (request, response, next) => {
 app.get('*', function(request, response){
 	response.render('notfound');
   });
-
-app.listen(process.env.PORT);
+const PORT = process.env.PORT || 443;
+app.listen(PORT);
+console.log(`Server is listening on port ${PORT}...`);
