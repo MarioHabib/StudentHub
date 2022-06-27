@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mysql = require('mysql');
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session');
 const path = require('path');
 const multer = require('multer');
 const { json } = require('express/lib/response');
@@ -18,26 +18,18 @@ const connection = mysql.createConnection({
 
 
 const app = express();
+app.set('view engine', 'ejs');
 app.set('trust proxy', 1);
 
 app.use(session({
-cookie:{
-    secure: true,
-    maxAge:60000
-       },
 secret: 'secret',
 saveUninitialized: true,
-resave: false
+resave: false,
+maxAge: 1000 * 60 * 15,
+cookie:{
+    secure: true
+       }
 }));
-
-app.use(function(request,response,next){
-if(!request.session){
-    return next(new Error('Oh no')) //handle error
-}
-next() //otherwise continue
-});
-app.set('view engine', 'ejs');
-
 
 
 // app.use(session({
@@ -106,7 +98,7 @@ async function mainMail(name, email, subject, message) {
 
 app.get("/contactus", (request, response) => {
 	
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		response.render("contactus" , { data: { username: globaluserobj.name } });
 	} else {
@@ -259,7 +251,7 @@ const reportMail = async function(postid, email, name, id) {
 
 app.get('/ohform', function(request, response) {
 	
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		connection.query('SELECT * FROM courses WHERE course_id = ?', [Number(request.query.course_id)], function(error, results, fields) {
 		
@@ -341,7 +333,7 @@ app.get('/delete/:postid', function(request, response, next){
 
 
 app.get('/login', function(request, response) {
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		response.redirect("Home");
 	} else {
@@ -359,7 +351,7 @@ app.get('/sitemap.xml', function(request, response) {
 	response.sendFile(path.join(__dirname + '/sitemap.xml'));
 });
 app.get('/FAQs', function(request, response) {	
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		response.render("FAQs" , { data: { username: globaluserobj.name } });
 	} else {
@@ -369,7 +361,7 @@ app.get('/FAQs', function(request, response) {
 });
 
 app.get('/studyspace', function(request, response) {
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		response.render("studyspace" , { data: { username: globaluserobj.name } });
 	} else {
@@ -380,7 +372,7 @@ app.get('/studyspace', function(request, response) {
 
 app.get('/schedule', function(request, response) {
 	
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		connection.query('SELECT * FROM courses', [], function(error, results, fields) {
 			response.render("schedule" , { data: { courses: results, username: globaluserobj.name } });
@@ -397,7 +389,7 @@ app.get('/schedule', function(request, response) {
 
 app.get('/courses', function(request, response) {
 	
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		connection.query('SELECT * FROM courses WHERE course_dept = ?', [request.query.dept], function(error, results, fields) {
 			response.render("courses" , { data: { courses: results, username: globaluserobj.name } });
@@ -413,7 +405,7 @@ app.get('/courses', function(request, response) {
 
 app.get('/courses_oh', function(request, response) {
 	
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		connection.query('SELECT * FROM courses WHERE course_dept = ?', [request.query.dept], function(error, results, fields) {
 			response.render("courses_oh" , { data: { courses: results, username: globaluserobj.name } });
@@ -429,7 +421,7 @@ app.get('/courses_oh', function(request, response) {
 app.get('/files', function(request, response) {
 	
 	
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		connection.query(' SELECT * FROM posts WHERE course_id = ?;SELECT * FROM courses WHERE course_id = ?', [Number(request.query.course_id),Number(request.query.course_id)], function(error, results, fields) {
 		
@@ -481,7 +473,7 @@ app.post('/post', upload.single('pdf'), function(request, response) {
 });
 
 app.get('/appointment', function(request, response) {
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		response.render("appointment" , { data: { username: globaluserobj.name } });
 
@@ -493,7 +485,7 @@ app.get('/appointment', function(request, response) {
 });
 
 app.get('/forgot-password', function(request, response) {
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		response.redirect("Home");
 	} else {
@@ -546,7 +538,7 @@ app.post('/forgotform', function(request, response) {
 app.get('/clubs', function(request, response) {
 	
 
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		connection.query('SELECT * FROM clubs', [], function(error, results, fields) {
 			response.render("clubs" , { data: { clubs: results, username: globaluserobj.name } });
@@ -562,7 +554,7 @@ app.get('/clubs', function(request, response) {
 app.get('/clubinfo', function(request, response) {
 	
 	
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		connection.query('SELECT * FROM clubs WHERE id = ?', [request.query.id], function(error, results, fields) {
 			response.render("clubinfo" , { data: { clubs: results, username: globaluserobj.name } });
@@ -600,7 +592,7 @@ app.post('/auth', function(request, response) {
 			// If the account exists
 			if (results.length > 0) {
 				// Authenticate the user
-				request.session.loggedin = true;
+				request.session = true;
 				request.session.studentid = studentid;
 				// Redirect to home page
 					var userobject= JSON.stringify(results[0]);
@@ -624,7 +616,7 @@ app.post('/auth', function(request, response) {
 
 app.get('/Home', function(request, response) {
 	// If the user is loggedin
-	if (request.session.loggedin) {
+	if (request.session) {
 		
 		response.render("Home", { data: { username: globaluserobj.name } } );
 		
@@ -642,7 +634,7 @@ app.get('/robots.txt', function (req, res) {
 });
 
 app.get('/logout',  (request, response, next) => {
-	request.session.loggedin = false;
+	request.session = null;
 
 	
 	response.redirect('login');
