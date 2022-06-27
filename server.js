@@ -642,7 +642,7 @@ app.get('/robots.txt', function (request, response) {
 });
 
 app.get('/logout',  (request, response, next) => {
-	cookies.set('testtoken', {expires: Date.now()});
+	cookies.set(cookies.session, {expires: Date.now()});
 
 	
 	response.redirect('login');
