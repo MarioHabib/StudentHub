@@ -2,6 +2,7 @@ require("dotenv").config();
 const mysql = require('mysql');
 const express = require('express');
 const session = require('cookie-session');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const multer = require('multer');
 const { json } = require('express/lib/response');
@@ -43,7 +44,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(express.static(__dirname + '/public'));
-
+app.use(cookieParser())
 //! Use of Multer
 var storage = multer.diskStorage({
     destination: (request, file, callBack) => {
@@ -61,7 +62,8 @@ var upload = multer({
 //Email contact
 
 const nodeMailer =  require('nodemailer');
-const { request } = require('https');
+//const { request } = require('https');
+var server  = require('https').createServer(app);
 const e = require('express');
 
 
@@ -96,9 +98,9 @@ async function mainMail(name, email, subject, message) {
 
 app.get("/contactus", (request, response) => {
 	
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
-		response.render("contactus" , { data: { username: globaluserobj.name } });
+		response.render("contactus" , { data: { username: request.session.name } });
 	} else {
 		// Not logged in
 		response.redirect('login');
@@ -121,7 +123,7 @@ app.post("/contact", async (request, response, next) => {
   const { yourname, youremail, yoursubject, yourmessage } = request.body;
   try {
     await mainMail(yourname, youremail, yoursubject, yourmessage);
-    response.render("contactusdone" , { data: { username: globaluserobj.name } });
+    response.render("contactusdone" , { data: { username: request.session.name } });
     
   } catch (error) {
 	console.log(error)
@@ -249,7 +251,7 @@ const reportMail = async function(postid, email, name, id) {
 
 app.get('/ohform', function(request, response) {
 	
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
 		connection.query('SELECT * FROM courses WHERE course_id = ?', [Number(request.query.course_id)], function(error, results, fields) {
 		
@@ -259,7 +261,7 @@ app.get('/ohform', function(request, response) {
 			
 			
 			
-			response.render("ohform" ,  { data: { courses: results, username: globaluserobj.name } });
+			response.render("ohform" ,  { data: { courses: results, username: request.session.name } });
 			 
 		
 		});
@@ -276,8 +278,8 @@ app.post("/form", async (request, response, next) => {
 	
 	try {
 	  
-		await ohMail(appointment, yourtopic, yourcomment, fullobjectglobal.course_title, fullobjectglobal.oh_day, fullobjectglobal.oh_room, fullobjectglobal.email, globaluserobj.email ,globaluserobj.name, globaluserobj.id);
-		response.render("officehoursdone" ,  { data: { username: globaluserobj.name } });
+		await ohMail(appointment, yourtopic, yourcomment, fullobjectglobal.course_title, fullobjectglobal.oh_day, fullobjectglobal.oh_room, fullobjectglobal.email, request.session.email ,request.session.name, request.session.id);
+		response.render("officehoursdone" ,  { data: { username: request.session.name } });
 		
 	} catch (error) {
 	  console.log(error)
@@ -294,7 +296,7 @@ app.post("/form", async (request, response, next) => {
 
 	try {
 	  
-		reportMail(postid,globaluserobj.email ,globaluserobj.name, globaluserobj.id);
+		reportMail(postid,request.session.email ,request.session.name, request.session.id);
 		response.redirect(request.get('referer'));
 		
 	} catch (error) {
@@ -331,27 +333,34 @@ app.get('/delete/:postid', function(request, response, next){
 
 
 app.get('/login', function(request, response) {
-	if (request.session) {
+	
+	
+		response.render('login');
+	
 		
-		response.redirect("Home");
-	} else {
-		response.render("login" );
-	}
+	
+		
 	
 });
 
 
 app.get('/', function(request, response) {
+
+	console.log('Cookies: ', request.cookies)
+
+  // Cookies that have been signed
+  console.log('Signed Cookies: ', request.signedCookies)
 	response.sendFile(path.join(__dirname + '/index.html'));
+
 });
 
 app.get('/sitemap.xml', function(request, response) {
 	response.sendFile(path.join(__dirname + '/sitemap.xml'));
 });
 app.get('/FAQs', function(request, response) {	
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
-		response.render("FAQs" , { data: { username: globaluserobj.name } });
+		response.render("FAQs" , { data: { username: request.session.name } });
 	} else {
 		// Not logged in
 		response.redirect('login');
@@ -359,9 +368,9 @@ app.get('/FAQs', function(request, response) {
 });
 
 app.get('/studyspace', function(request, response) {
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
-		response.render("studyspace" , { data: { username: globaluserobj.name } });
+		response.render("studyspace" , { data: { username: request.session.name } });
 	} else {
 		// Not logged in
 		response.redirect('login');
@@ -370,10 +379,10 @@ app.get('/studyspace', function(request, response) {
 
 app.get('/schedule', function(request, response) {
 	
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
 		connection.query('SELECT * FROM courses', [], function(error, results, fields) {
-			response.render("schedule" , { data: { courses: results, username: globaluserobj.name } });
+			response.render("schedule" , { data: { courses: results, username: request.session.name } });
 		});
 
 	} else {
@@ -387,10 +396,10 @@ app.get('/schedule', function(request, response) {
 
 app.get('/courses', function(request, response) {
 	
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
 		connection.query('SELECT * FROM courses WHERE course_dept = ?', [request.query.dept], function(error, results, fields) {
-			response.render("courses" , { data: { courses: results, username: globaluserobj.name } });
+			response.render("courses" , { data: { courses: results, username: request.session.name } });
 			
 		});
 
@@ -403,10 +412,10 @@ app.get('/courses', function(request, response) {
 
 app.get('/courses_oh', function(request, response) {
 	
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
 		connection.query('SELECT * FROM courses WHERE course_dept = ?', [request.query.dept], function(error, results, fields) {
-			response.render("courses_oh" , { data: { courses: results, username: globaluserobj.name } });
+			response.render("courses_oh" , { data: { courses: results, username: request.session.name } });
 			
 		});
 
@@ -419,13 +428,13 @@ app.get('/courses_oh', function(request, response) {
 app.get('/files', function(request, response) {
 	
 	
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
 		connection.query(' SELECT * FROM posts WHERE course_id = ?;SELECT * FROM courses WHERE course_id = ?', [Number(request.query.course_id),Number(request.query.course_id)], function(error, results, fields) {
 		
 			courseid = global.Number(request.query.course_id);
 			
-			response.render("files" , { data: { posts: results[0], username: globaluserobj.name, studentid: globaluserobj.id, courses: results[1] } });
+			response.render("files" , { data: { posts: results[0], username: request.session.name, studentid: request.session.id, courses: results[1] } });
 		});
 
 	} else {
@@ -454,8 +463,8 @@ app.post('/post', upload.single('pdf'), function(request, response) {
 	let filename2= "\""+ filename1+  "\"" ;
 	let attach= "\""+ pdfsrc+  "\"" ;
 	let posttextq= "\""+ posttext+  "\"" ;
-	let studentname= "\""+ globaluserobj.name+  "\"" ;
-	let studentid= "\""+ globaluserobj.id+  "\"" ;
+	let studentname= "\""+ request.session.name+  "\"" ;
+	let studentid= "\""+ request.session.id+  "\"" ;
 	let sql = "INSERT INTO posts (course_id, posttext, attach,filename,datetime, name,studentid) VALUES ("+courseid+","+posttextq+","+attach+","+filename2+","+datetime+","+studentname+","+studentid+")";
 	
 	
@@ -471,9 +480,9 @@ app.post('/post', upload.single('pdf'), function(request, response) {
 });
 
 app.get('/appointment', function(request, response) {
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
-		response.render("appointment" , { data: { username: globaluserobj.name } });
+		response.render("appointment" , { data: { username: request.session.name } });
 
 		
 	} else {
@@ -483,7 +492,7 @@ app.get('/appointment', function(request, response) {
 });
 
 app.get('/forgot-password', function(request, response) {
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
 		response.redirect("Home");
 	} else {
@@ -536,10 +545,10 @@ app.post('/forgotform', function(request, response) {
 app.get('/clubs', function(request, response) {
 	
 
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
 		connection.query('SELECT * FROM clubs', [], function(error, results, fields) {
-			response.render("clubs" , { data: { clubs: results, username: globaluserobj.name } });
+			response.render("clubs" , { data: { clubs: results, username: request.session.name } });
 		});
 		
 	} else {
@@ -552,10 +561,10 @@ app.get('/clubs', function(request, response) {
 app.get('/clubinfo', function(request, response) {
 	
 	
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
 		connection.query('SELECT * FROM clubs WHERE id = ?', [request.query.id], function(error, results, fields) {
-			response.render("clubinfo" , { data: { clubs: results, username: globaluserobj.name } });
+			response.render("clubinfo" , { data: { clubs: results, username: request.session.name } });
 		});
 		
 	} else {
@@ -590,13 +599,14 @@ app.post('/auth', function(request, response) {
 			// If the account exists
 			if (results.length > 0) {
 				// Authenticate the user
-				request.session = true;
-				request.session.studentid = studentid;
+				
 				// Redirect to home page
 					var userobject= JSON.stringify(results[0]);
 					fulluserobject = JSON.parse(userobject);
 					globaluserobj = global.fulluserobject;
-					
+					request.session = globaluserobj;
+					console.log(request.session);
+				request.session.studentid = studentid;
 				
 				  response.redirect('Home');
 			} else {
@@ -614,9 +624,9 @@ app.post('/auth', function(request, response) {
 
 app.get('/Home', function(request, response) {
 	// If the user is loggedin
-	if (request.session) {
+	if (typeof request.session !== null) {
 		
-		response.render("Home", { data: { username: globaluserobj.name } } );
+		response.render("Home", { data: { username: request.session.name } } );
 		
 	} else {
 		// Not logged in
@@ -626,7 +636,7 @@ app.get('/Home', function(request, response) {
 	
 });
 
-app.get('/robots.txt', function (req, res) {
+app.get('/robots.txt', function (request, response) {
     res.type('text/plain');
     res.send("User-agent: *\nDisallow: /");
 });
