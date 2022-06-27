@@ -642,7 +642,7 @@ app.get('/robots.txt', function (request, response) {
 });
 
 app.get('/logout',  (request, response, next) => {
-	request.session = null;
+	request.session.destroy();
 
 	
 	response.redirect('login');
