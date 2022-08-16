@@ -10,10 +10,10 @@ const bodyParser = require('body-parser');
 
 
 const connection = mysql.createConnection({
-	host     : 'eu-cdbr-west-02.cleardb.net',
-	user     : 'b47adab09e098c',
-	password : '7a480c1d',
-	database : 'heroku_3c8c520b5a07ad3',
+	host     : '',
+	user     : '',
+	password : '',
+	database : '',
 	multipleStatements: true,
 });
 
@@ -29,14 +29,6 @@ cookie:{
     secure: true
        }
 }));
-
-
-// app.use(session({
-// 	secret: 'keyboard cat',
-// 	resave: false,
-// 	saveUninitialized: false,
-
-// }));
 
 
 
@@ -62,7 +54,7 @@ var upload = multer({
 //Email contact
 
 const nodeMailer =  require('nodemailer');
-//const { request } = require('https');
+
 var server  = require('https').createServer(app);
 const e = require('express');
 
